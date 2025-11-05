@@ -1,8 +1,8 @@
 
-resource aws_key_pair my_key{
-    key_name = "terraform-key"
-    public_key = file("${path.module}/terraform-key.pub")
-} 
+resource "aws_key_pair" "my_key" {
+  key_name   = "terraform-key"
+  public_key = file("${path.module}/terraform-key.pub")
+}
 resource "aws_security_group" "ec2_sg" {
   name        = "ec2-sg"
   description = "Allow SSH and HTTP"
@@ -37,13 +37,13 @@ resource "aws_security_group" "ec2_sg" {
 }
 
 resource "aws_instance" "terraform-instance" {
-  ami                    = "ami-07f07a6e1060cd2a8" 
-  instance_type          = "t3.micro"
-  subnet_id              = var.subnet_id
-  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  ami                         = "ami-07f07a6e1060cd2a8"
+  instance_type               = "t3.micro"
+  subnet_id                   = var.subnet_id
+  vpc_security_group_ids      = [aws_security_group.ec2_sg.id]
   associate_public_ip_address = true
-  key_name               = aws_key_pair.my_key.key_name  
-  iam_instance_profile   = "ssm-management"    
+  key_name                    = aws_key_pair.my_key.key_name
+  iam_instance_profile        = "ssm-management"
 
   root_block_device {
     volume_size = 10
